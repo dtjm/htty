@@ -3,6 +3,7 @@ require File.expand_path("#{File.dirname __FILE__}/../command")
 require File.expand_path("#{File.dirname __FILE__}/body_request")
 require File.expand_path("#{File.dirname __FILE__}/headers_response")
 require File.expand_path("#{File.dirname __FILE__}/status")
+require 'json'
 
 module HTTY; end
 
@@ -49,7 +50,11 @@ class HTTY::CLI::Commands::BodyResponse < HTTY::CLI::Command
       raise HTTY::NoResponseError
     end
     unless (body = response.body).to_s.empty?
-      puts body
+      begin
+        puts JSON.pretty_generate JSON.parse body
+      rescue
+        puts body
+      end
     end
     self
   end
