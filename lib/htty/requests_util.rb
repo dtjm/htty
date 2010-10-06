@@ -73,7 +73,12 @@ private
 
   def self.request(request)
     http = Net::HTTP.new(request.uri.host, request.uri.port)
-    http.use_ssl = true if request.uri.kind_of?(URI::HTTPS)
+    
+    if request.uri.kind_of?(URI::HTTPS)
+        http.use_ssl     = true
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE 
+    end
+
     http.start do |host|
       http_response = yield(host)
       headers = []
