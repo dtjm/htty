@@ -50,7 +50,7 @@ class HTTY::CLI::Commands::BodyResponse < HTTY::CLI::Command
       raise HTTY::NoResponseError
     end
         
-    unless (body = response.body).strip.empty?
+    unless (body = response.body).to_s.empty?
 
         # Output the body based on the JSON format option
         case session.options[:json_format]
