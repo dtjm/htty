@@ -76,7 +76,12 @@ private
     
     if request.uri.kind_of?(URI::HTTPS)
         http.use_ssl     = true
-        http.verify_mode = OpenSSL::SSL::VERIFY_NONE 
+
+        if request.ssl_verify
+            http.verify_mode = OpenSSL::SSL::VERIFY_PEER 
+        else
+            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
     end
 
     http.start do |host|
