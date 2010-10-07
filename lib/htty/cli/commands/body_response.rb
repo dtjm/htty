@@ -49,13 +49,27 @@ class HTTY::CLI::Commands::BodyResponse < HTTY::CLI::Command
     unless (response = session.last_response)
       raise HTTY::NoResponseError
     end
-    unless (body = response.body).to_s.empty?
-      begin
-        puts JSON.pretty_generate JSON.parse body
-      rescue
-        puts body
-      end
+        
+    unless (body = response.body).strip.empty?
+
+        # Output the body based on the JSON format option
+        case session.options[:json_format]
+
+        when 'on'
+            puts JSON.pretty_generate JSON.parse body
+
+        when 'off'
+            puts body
+
+        when 'auto'
+            begin
+                puts JSON.pretty_generate JSON.parse body
+            rescue
+                puts body
+            end
+        end
     end
+    
     self
   end
 

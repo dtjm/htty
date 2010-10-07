@@ -8,10 +8,14 @@ class HTTY::Session
   # Returns the requests made during the session.
   attr_reader :requests
 
+  # A place to save session options
+  attr :options
+
   # Initializes a new HTTY::Session with specified _address_ for the first of
   # the session's #requests.
   def initialize(address)
     @requests = [HTTY::Request.new(address)]
+    @options  = { :json_format => 'auto' }
   end
 
   # Walks #requests and returns its last HTTY::Response.
