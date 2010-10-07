@@ -128,11 +128,15 @@ public
   # Returns the URI of the request.
   attr_reader :uri
 
+  # Get or set the ssl_verify option
+  attr_accessor :ssl_verify
+
   # Initializes a new HTTY::Request with a #uri corresponding to the specified
   # _address_.
   def initialize(address)
     super({:headers => [['User-Agent', "htty/#{HTTY::VERSION}"]]})
     @uri = self.class.parse_uri(address)
+    @ssl_verify = true
     establish_basic_authentication
     establish_content_length
   end
@@ -140,8 +144,9 @@ public
   # @private
   def initialize_copy(source)
     super
-    @response = @response.dup if @response
-    @uri      = @uri.dup
+    @ssl_verify = @ssl_verify
+    @response   = @response.dup if @response
+    @uri        = @uri.dup
   end
 
   # Returns +true+ if _other_request_ is equivalent to the request.
