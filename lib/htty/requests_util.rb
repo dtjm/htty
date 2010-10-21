@@ -1,6 +1,7 @@
 require 'net/http'
 require 'net/https'
 require 'uri'
+require File.expand_path("#{File.dirname __FILE__}/preferences")
 require File.expand_path("#{File.dirname __FILE__}/response")
 
 module HTTY; end
@@ -73,15 +74,12 @@ private
 
   def self.request(request)
     http = Net::HTTP.new(request.uri.host, request.uri.port)
-    
-    if request.uri.kind_of?(URI::HTTPS)
-        http.use_ssl     = true
 
-        if request.ssl_verify
-            http.verify_mode = OpenSSL::SSL::VERIFY_PEER 
-        else
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        end
+    if request.uri.kind_of?(URI::HTTPS)
+      http.use_ssl = true
+      http.verify_mode = HTTY::Preferences.current.verify_certificates? ?
+                         OpenSSL::SSL::VERIFY_PEER                      :
+                         OpenSSL::SSL::VERIFY_NONE
     end
 
     http.start do |host|

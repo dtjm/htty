@@ -1,6 +1,7 @@
 .bundle/
 .yardoc/
 doc/
+spec/system/scenarios/**/actual_*
 vendor/
 .rvmrc
 *.gem
